@@ -1,0 +1,25 @@
+{
+    "name": "cwola/transaction",
+    "description": "Simple transaction modules.",
+    "type": "library",
+    "keywords": [
+      "php",
+      "cwola",
+      "transaction"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "r-jimbo"
+        }
+    ],
+    "homepage": "https://github.com/cwola/transaction",
+    "require": {
+      "php": ">=7.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Cwola\\Transaction\\": "src/"
+        }
+    }
+}
