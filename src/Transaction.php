@@ -34,6 +34,11 @@ class Transaction {
      */
     protected array $transactionLog;
 
+    /**
+     * @var bool
+     */
+    public bool $autoCommit;
+
 
     /**
      * @param void
@@ -42,6 +47,17 @@ class Transaction {
         $this->xid = \bin2hex(\random_bytes(16));
         $this->status = static::TRANSACTION_CLOSED;
         $this->transactionLog = [];
+        $this->autoCommit = false;
+        \register_shutdown_function(function() {
+            $this->shutdown();
+        });
+    }
+
+    /**
+     * @param void
+     */
+    public function __destruct() {
+        $this->shutdown();
     }
 
     /**
@@ -116,6 +132,20 @@ class Transaction {
      */
     public function clearTransactionLog() :bool {
         $this->transactionLog = [];
+        return true;
+    }
+
+    /**
+     * @param void
+     * @return bool
+     */
+    protected function shutdown() :bool {
+        if ($this->inTransaction()) {
+            if ($this->autoCommit) {
+                return $this->commit();
+            }
+            return $this->rollback();
+        }
         return true;
     }
 }
