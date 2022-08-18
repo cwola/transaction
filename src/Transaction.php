@@ -20,6 +20,11 @@ class Transaction {
 
 
     /**
+     * @var string
+     */
+    protected string $xid;
+
+    /**
      * @var int
      */
     protected int $status;
@@ -34,6 +39,7 @@ class Transaction {
      * @param void
      */
     public function __construct() {
+        $this->xid = \bin2hex(\random_bytes(16));
         $this->status = static::TRANSACTION_CLOSED;
         $this->transactionLog = [];
     }
@@ -93,13 +99,23 @@ class Transaction {
      * @return bool
      */
     public function logging(Record $record = null, array $attributes = []) :bool {
-        $xid = \count($this->transactionLog);
+        $rid = \count($this->transactionLog) + 1;
         if (!($record instanceof Record)) {
             $record = new Record;
         }
-        $record->xid = $xid;
+        $record->xid = $this->xid;
+        $record->id = $rid;
         $record->attributes = \array_merge($record->attributes, $attributes);
         $this->transactionLog[] = $record;
+        return true;
+    }
+
+    /**
+     * @param void
+     * @return bool
+     */
+    public function clearTransactionLog() :bool {
+        $this->transactionLog = [];
         return true;
     }
 }

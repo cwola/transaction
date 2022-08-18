@@ -7,9 +7,14 @@ namespace Cwola\Transaction;
 class Record {
 
     /**
+     * @param string
+     */
+    public string $xid = '';
+
+    /**
      * @param int
      */
-    public int $xid = 0;
+    public int $id = 0;
 
     /**
      * @param array
