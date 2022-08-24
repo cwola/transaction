@@ -130,7 +130,7 @@ class Transaction {
      * @param void
      * @return bool
      */
-    public function clearTransactionLog() :bool {
+    protected function clearTransactionLog() :bool {
         $this->transactionLog = [];
         return true;
     }
