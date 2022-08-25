@@ -15,7 +15,9 @@
     ],
     "homepage": "https://github.com/cwola/transaction",
     "require": {
-      "php": ">=7.0.0"
+      "php": ">=7.0.0",
+      "cwola/attribute": "^1.0",
+      "cwola/event": "^1.0"
     },
     "autoload": {
         "psr-4": {

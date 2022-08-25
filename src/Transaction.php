@@ -6,7 +6,18 @@ namespace Cwola\Transaction;
 
 use LogicException;
 
-class Transaction {
+use Cwola\Attribute\Readable;
+use Cwola\Event;
+
+/**
+ * @property string $xid transaction id. [readonly]
+ * @property int $status [readonly]
+ * @property \Cwola\Transaction\Record[] $transactionLog [readonly]
+ */
+class Transaction implements Event\EventTarget {
+
+    use Readable;
+    use Event\EventDispatcher;
 
     /**
      * @var int
@@ -22,16 +33,19 @@ class Transaction {
     /**
      * @var string
      */
+    #[Readable]
     protected string $xid;
 
     /**
      * @var int
      */
+    #[Readable]
     protected int $status;
 
     /**
      * @var \Cwola\Transaction\Record[]
      */
+    #[Readable]
     protected array $transactionLog;
 
     /**
@@ -70,8 +84,12 @@ class Transaction {
         if ($this->inTransaction()) {
             throw new LogicException('Transaction is already open.');
         }
+        $this->dispatchEvent('beginning');
+
         $this->clearTransactionLog();
         $this->status = static::TRANSACTION_OPENED;
+
+        $this->dispatchEvent('begin');
         return true;
     }
 
@@ -83,8 +101,12 @@ class Transaction {
         if (!$this->inTransaction()) {
             throw new LogicException('Transaction is not open.');
         }
+        $this->dispatchEvent('rollbacking');
+
         $this->clearTransactionLog();
         $this->status = static::TRANSACTION_CLOSED;
+
+        $this->dispatchEvent('rollback');
         return true;
     }
 
@@ -96,8 +118,12 @@ class Transaction {
         if (!$this->inTransaction()) {
             throw new LogicException('Transaction is not open.');
         }
+        $this->dispatchEvent('committing');
+
         $this->clearTransactionLog();
         $this->status = static::TRANSACTION_CLOSED;
+
+        $this->dispatchEvent('commit');
         return true;
     }
 
