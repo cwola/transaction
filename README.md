@@ -10,6 +10,8 @@ This module is not intended to be used by itself.
 
 ## Requirement
 - PHP7.0+
+- [cwola/attribute](https://packagist.org/packages/cwola/attribute)
+- [cwola/event](https://packagist.org/packages/cwola/event)
 
 ## Installation
 ```
